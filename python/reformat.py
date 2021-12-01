@@ -1,23 +1,24 @@
 import json
 
-print("This program reformats a space-delimited list of words (no quotes) as a json file")
+print("This program reformats a '\n'-delimited list of words (with no quotes) as a json file")
 
 print("Please specify an input file. Include full file name")
 inputFile = input()
 
 print("Please specify an output file. Do not include .json extension. It is assumed by the program")
-outputFile = input()
+outputFile = input() + ".json"
 
-dict1 = {}
+dict = []
 
 with open(inputFile) as rawDict:
 	for line in rawDict:
-		wordInList = line.split()
-		word = wordInList[0].lower()
-		dict1[word] = "1"
-		
-print(len(dict1) + " words")
+		wordInList = line.split("\n")
+		word = wordInList[0].lower().strip()
+		dict.append(word)
 
-out_file = open(outputFile, 'w')
-json.dump(dict1, out_file, indent = 2)
-out_file.close()
+print(str(len(dict)) + " words")
+
+with open(outputFile, 'w') as out_file:
+	json.dump(dict, out_file, indent=2)
+
+print("Program complete. File written to: " + outputFile)

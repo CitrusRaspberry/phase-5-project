@@ -1,25 +1,40 @@
 import json
 
-osDict, internetDict, newDict = {}, {}, {}
+firstDict, secondDict, newDict = [], [], []
 
-with open("mac_words.json") as osWords:
-	osDict = json.load(osWords)
+print("This program takes two json lists of words as an array and returns the")
+print("contents of the first array that don't exist in the second array.")
+print("Output file will always be called comparison.json and will exist in directory that this script is called in.\n")
 
-with open("internet_words.json") as internetWords:
-	internetDict = json.load(internetWords)
+print("Please enter the name of the first .json file.")
+print("This is the file that is checked against the other for words that don't exist in the latter.")
+print("Do not include .json extension.")
+firstFile = input() + ".json"
 
+with open(firstFile) as file:
+	firstDict = json.load(file)
 
-for word in internetDict:
+print("\nPlease enter the name of the second .json file. Do not inlclude .json extension.")
+secondFile = input() + ".json"
+
+with open(secondFile) as file:
+	secondDict = json.load(file)
+
+print("Comparing lists...")
+
+for word in firstDict:
 	try:
-		osDict[word]
+		secondDict.index(word)
 	except:
-		newDict[word] = 1
+		newDict.append(word)
 
-print(str(len(internetDict)) + " words in initial dictionary")
-print(str(len(osDict)) + " words in compared dictionary")
-print(str(len(newDict)) + " words not in compared dictionary")
+print(str(len(firstDict)) + " words in initial dictionary")
+print(str(len(secondDict)) + " words in compared dictionary")
+print(str(len(newDict)) + " words not in compared dictionary\n")
 
-out_file = open("comparison.json", "w")
-json.dump(newDict, out_file, indent = 2)
+print("Saving new list to comparison.json")
+
+with open("comparison.json", "w") as out_file:
+	json.dump(newDict, out_file, indent=2)
+
 print("Data dumped into file")
-out_file.close()
