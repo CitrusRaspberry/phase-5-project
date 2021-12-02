@@ -1,12 +1,16 @@
 import json
 
 # Testing functions. Call them to check ratios. Ratios should be close to 1.0
+
+
 def testComesBeforeRatios():
 	for letterKey in wordStats:
 		totals = 0.0
 		for letter in wordStats[letterKey]["comesBefore"]:
 			totals += wordStats[letterKey]["comesBefore"][letter]["ratio"]
 		print(totals)
+
+
 def testStartAndEndRatios():
 	totalStartsWord = 0.0
 	totalEndsWord = 0.0
@@ -15,6 +19,7 @@ def testStartAndEndRatios():
 		totalEndsWord += wordStats[letterKey]["endsWord"]["ratio"]
 	print(totalStartsWord)
 	print(totalEndsWord)
+
 
 ############################################
 # Program starts and asks for input
@@ -73,17 +78,20 @@ for letterKey in wordStats:
 	for category in wordStats[letterKey]:
 		if category == "comesBefore":
 			for letter in wordStats[letterKey]["comesBefore"]:
-				totalPreceedingsForLetter = float(wordStats[letterKey]["comesBefore"][letter]["total"])
+				totalPreceedingsForLetter = float(
+					wordStats[letterKey]["comesBefore"][letter]["total"])
 				totalPreceedings = float(total["letterPreceedings"][letterKey])
 				wordStats[letterKey]["comesBefore"][letter]["ratio"] = totalPreceedingsForLetter / totalPreceedings
 		elif category == "startsWord" or category == "endsWord":
 			totalInCategory = float(wordStats[letterKey][category]["total"])
 			totalWords = float(total["words"])
 			wordStats[letterKey][category]["ratio"] = totalInCategory / totalWords
+# Wrap wordStats in an another object for easy json-server readability
+wordStats = {"data": wordStats}
 
 ############################################
 # Dumps data into output file. Print success message
 with open("wordStats.json", "w") as out_file:
-	json.dump(wordStats, out_file, indent = 4)
+	json.dump(wordStats, out_file, indent=4)
 
 print("Word stats have been successfully dumped in json format to this directory as 'wordStats.json'")

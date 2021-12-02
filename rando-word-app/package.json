@@ -14,6 +14,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "server1": "json-server --watch ./data/wordStats.json -p 3001",
+    "server2": "json-server --watch ./data/wordStats2.json -p 3002",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
