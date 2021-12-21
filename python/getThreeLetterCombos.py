@@ -32,8 +32,8 @@ for word in words:
 ##############################################
 # Calculating ratio, based on total combinations counted and each combo occurance
 for combo in uniqueCombos:
-    uniqueCombos[combo]["ratio"] = format(
-        uniqueCombos[combo]["total"] / totalCombos, ".15f")
+    uniqueCombos[combo]["ratio"] = float(format(
+        uniqueCombos[combo]["total"] / totalCombos, ".15f"))
 
 print("\n" + str(len(uniqueCombos))
       + " unique combos found in " + str(len(words)) + " words.")
