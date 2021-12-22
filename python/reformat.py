@@ -1,6 +1,6 @@
 import json
 
-print("This program reformats a '\n'-delimited list of words (with no quotes) as a json file")
+print("This program reformats a '\\n'-delimited list of words (with no quotes) as a json file")
 
 print("Please specify an input file. Include full file name")
 inputFile = input()
