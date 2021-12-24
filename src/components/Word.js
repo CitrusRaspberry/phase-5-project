@@ -12,12 +12,9 @@ function Word() {
                 setAllStats(allStatsObj)
             }
         }
-        fetch("http://localhost:3002/data")
+        fetch("http://localhost:9292/stats")
         .then(r => r.json())
-        .then(wordStatsData => sendStats(wordStatsData, "wordStats"))
-        fetch("http://localhost:3004/data")
-        .then(r => r.json())
-        .then(comboStatsData => sendStats(comboStatsData, "comboStats"))
+        .then(wordStatsData => setAllStats(wordStatsData))
 
     }, []);
 
@@ -158,11 +155,11 @@ function Word() {
                 console.log("In dictionary? -->", generatedWord)
             }
         }
-        const numOfWords = 100;
+        const numOfWords = 10;
         let objectOfWords = {};
         if (Object.keys(allStats).length) {
             for ( let i = 0; i < numOfWords; i++ ) {
-                const newWord = createWord(5, allStats.wordStats, allStats.comboStats)
+                const newWord = createWord(5, allStats.single_letter, allStats["3-letter_combo"])
                 objectOfWords = { ...objectOfWords, [newWord]: null }
             }
             console.log(objectOfWords);
