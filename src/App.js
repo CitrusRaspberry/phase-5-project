@@ -1,15 +1,19 @@
 import './App.css';
-import Word from "./components/Word";
+import NavBar from "./components/NavBar";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
     return (
         <div className="App">
-            <header className="App-header">
-                <h1>Generate Random Word</h1>
-            </header>
-            <Word />
+            <NavBar />
+            <Routes>
+                <Route path="/" element={<p>Home</p>}/>
+                <Route path="/how-it-works" element={<p>Products</p>}/>
+                <Route path="/add-your-own" element={<p>add</p>}/>
+                <Route path="/for-developers" element={<p>dev</p>}/>
+            </Routes>
         </div>
     );
 }
 
-    export default App;
+export default App;
