@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -14,9 +14,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Drawer from "@mui/material/Drawer";
 
+import NavBarSpacer from "./NavBarSpacer";
+import styled from "styled-components";
+
 
 const pages = ["Home", "How It Works", "Add Your Own", "For Developers"];
-const styleLinkToPlain = { color: "inherit", textDecoration: "none" };
 const getPathFrom = page => {
     switch (page.toLowerCase()) {
         case "home":
@@ -26,33 +28,25 @@ const getPathFrom = page => {
     }
 }
 
+const PlainLink = styled(Link)`
+    color: inherit;
+    text-decoration: none;
+`
+
+
 function NavBar() {
-    const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-
-    const list = () => (
-        <Box
-            sx={{ width: 250 }}
-            role="presentation"
-            onClick={() => setDrawerIsOpen(false)}
-            onKeyDown={() => setDrawerIsOpen(false)}
-        >
-            <List>
-                {pages.map((page) => {
-                    const path = getPathFrom(page);
-                    return (
-                        <Link key={page} style={styleLinkToPlain} to={path}>
-                            <ListItem button>
-                                <ListItemText primary={page} />
-                            </ListItem>
-                        </Link>
-                    );
-                })}
-            </List>
-        </Box>
-    );
-
+    const [ drawerIsOpen, setDrawerIsOpen ] = useState(false);
+    const [ navBarHeight, setNavBarHeight ] = useState(0)
+    const appBarRef = useRef();
+    
+    useEffect(() => {
+        setNavBarHeight(appBarRef.current.offsetHeight)
+    }, [appBarRef])
+    
     return (
-        <AppBar position="static">
+        <>
+        <NavBarSpacer height={navBarHeight} />
+        <AppBar ref={appBarRef}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography
@@ -96,7 +90,25 @@ function NavBar() {
                         open={drawerIsOpen}
                         onClose={() => setDrawerIsOpen(false)}
                     >
-                        {list()}
+                        <Box
+                            sx={{ width: 250 }}
+                            role="presentation"
+                            onClick={() => setDrawerIsOpen(false)}
+                            onKeyDown={() => setDrawerIsOpen(false)}
+                        >
+                            <List>
+                                {pages.map((page) => {
+                                    const path = getPathFrom(page);
+                                    return (
+                                        <PlainLink key={page} to={path}>
+                                            <ListItem button>
+                                                <ListItemText primary={page} />
+                                            </ListItem>
+                                        </PlainLink>
+                                    );
+                                })}
+                            </List>
+                        </Box>
                     </Drawer>
                     <Box
                         sx={{
@@ -107,9 +119,8 @@ function NavBar() {
                         {pages.map((page) => {
                             const path = getPathFrom(page);
                             return (
-                                <Link
+                                <PlainLink
                                     key={page}
-                                    style={styleLinkToPlain}
                                     to={path}
                                 >
                                     <Button
@@ -122,13 +133,14 @@ function NavBar() {
                                     >
                                         {page}
                                     </Button>
-                                </Link>
+                                </PlainLink>
                             );
                         })}
                     </Box>
                 </Toolbar>
             </Container>
         </AppBar>
+        </>
     );
 }
 
