@@ -25,6 +25,7 @@ const Cover = styled.div`
         color: white;
         height: 100%;
         border-radius: 10px;
+        border: #555 solid 3px;
     }
     .App-page_red {
         background: #f44336;
@@ -41,12 +42,18 @@ const Cover = styled.div`
 `
 const Text = styled(Typography)`
     text-align: left;
-    padding: 5px 20px;
+    padding: 0 20px;
+    @media (max-height: 800px) {
+        font-size: 20px;
+    }
+    @media (max-height: 650px) {
+        font-size: 16px;
+    }
 `
 
 function BookPages({ height, width, borderRadius, scrollProgress }) {
     const [ page, setPage ] = useState({selected: 0})
-    const textVariant = "h6"
+    const textVariant = "h5";
 
     const displayPages = lines => {
         if (lines) {
@@ -180,7 +187,6 @@ function BookPages({ height, width, borderRadius, scrollProgress }) {
         const pageInt = parseInt(actualPageNum);
         const pageDec = actualPageNum - pageInt;
         const adjustedPageNum = ( pageDec >= 0.5 ? Math.round(actualPageNum) : pageInt + (pageDec * 2) )
-        console.log(adjustedPageNum)
         setPage({selected: adjustedPageNum})        
     }
 

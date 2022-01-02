@@ -9,7 +9,7 @@ const BookCover = styled.div`
     max-width: 90vw;
     transform: translate(-50%, -50%);
     background-color: gray;
-    box-shadow: -5px 10px #444;
+    box-shadow: -6px 12px #444;
 `
 
 function Book({ scrollProgress }) {
