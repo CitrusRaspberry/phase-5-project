@@ -1,42 +1,31 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import Book from "./Book";
+
 const Container = styled.div`
-    height: 789vh;
+    height: 500vh;
 `
 
-const Canvas = styled.canvas`
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    height: 500px;
-    width: 500px;
-    max-height: 100vh;
-    max-width: 100vw;
-    transform: translate(-50%, -50%);
-    background-color: red;
-    `
 
 function HowItWorks() {
 
-    const ref = useRef();
+    const [ scrollProgress, setScrollProgress ] = useState(0.00)
 
-    const handleScroll = e => {
-        const x = window.innerHeight;
-        const y = window.scrollY;
-        console.log(window) 
+    const handleScroll = () => {
+        const currentScroll = document.documentElement.scrollTop;
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = (100 * currentScroll / windowHeight).toFixed(2);
+        setScrollProgress(progress)
     }
 
     useEffect(() => {
-        window.addEventListener("scroll", e => handleScroll(e))
+        window.addEventListener("scroll", () => handleScroll())
     }, [])
     
     return (
-        <Container ref={ref}>
-            <p>Hi there!</p>
-            <Canvas>
-                
-            </Canvas>
+        <Container>
+            <Book scrollProgress={scrollProgress} />
         </Container>
         
     )
