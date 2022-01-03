@@ -26,7 +26,7 @@ function Word() {
     useEffect(() => {
         const controller = new AbortController()
         const signal = controller.signal
-        fetch("https://word-generator-app.herokuapp.com/random_word", {
+        fetch("https://word-generator-app.herokuapp.com/random_word/example", {
             method: "GET",
             signal: signal,
         })
