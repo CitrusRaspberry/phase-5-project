@@ -27,7 +27,7 @@ function CreateLexiconForm() {
         },
     });
     const [ formData, setFormData ] = useState({
-        lexiconName: null,
+        lexiconName: "",
         fileData: null,
     });
     const anyNameErrors = Object.values(errors.lexiconName).find(er => er);
@@ -173,6 +173,7 @@ function CreateLexiconForm() {
                                     "Name must not be blank or already in use"
                                 }
                                 onChange={(e) => handleNameChange(e)}
+                                value={formData.lexiconName}
                                 error={anyNameErrors}
                                 fullWidth
                             />
