@@ -18,7 +18,7 @@ import NavBarSpacer from "./NavBarSpacer";
 import styled from "styled-components";
 
 
-const pages = ["Home", "How It Works", "Add Your Own", "For Developers"];
+const pages = ["Home", "How It Works", "Create Your Own", "For Developers"];
 const getPathFrom = page => {
     switch (page.toLowerCase()) {
         case "home":

@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import styled from "styled-components";
 import { Typography } from '@mui/material';
 import FlippingPages from 'flipping-pages'
@@ -163,17 +163,17 @@ function BookPages({ height, width, borderRadius, scrollProgress }) {
         ]},
     ]
     const text = [
-        {text0: "Welcome! Scroll down or swipe to learn how this app works."},
+        {text0: "Welcome! Scroll down or swipe left to learn how this app works."},
         {text1: "Here we have an example list of words. To pick a starting letter for our computer generated word, we first need to count and determine the frequency of each starting letter's occurance in the list above."},
         {text2: "The array above shows that, in our list, 'a' begun a word 17% of the time, 'b' begun a word 33% of the time, etc. Now a letter is selected at random, where there is a 17% chance that 'a' will be selected, a 33% chance that 'b' will be selected, etc."},
         {text3: "Let's say that 'e' was selected. This is the beginning of our computer generated word! Now we need a second letter."},
-        {text4: "The algorithm now looks at every occurance of combinations of 2 letters with 'e' as the starting letter: 'el', 'eg', ee', 'es'. Notice the 'e' in apple is not included. That is because there is no letter after 'e', so it will not help us find a letter that comes after 'e'."},
+        {text4: "The algorithm now looks at every occurance of 2-letter combinations with 'e' as the starting letter: 'el', 'eg', ee', 'es'. Notice the 'e' in apple is not included. That is because there is no letter after 'e' in 'apple', so it will not help us find a letter that comes after 'e'."},
         {text5: "The same process of finding frequencies and randomly selecting the next letter based on the frequency of each occurnace takes place."},
         {text6: "The process continues and the length of the evaluated combination of letters dynamically increases as the length of the word grows."},
         {text7: "Our word now looks like this."},
-        {text8: "Uh oh. We cannot continue because our list of words does not include a letter combination of 'egg' with another letter after that"},
-        {text9: "To solve this, the algorithm will evaluate next possible letters using our word with the first letter chopped off."},
-        {text10: "This still can't be evaluated. There are no 3-letter combinations that start with 'gg'. Let's chop off one more."},
+        {text8: "Uh oh. We cannot continue because our list of words does not include a 4-letter combination starting with 'egg'."},
+        {text9: "To solve this, the algorithm will evaluate the next possible letter using our word with the first letter chopped off. In this case, 'e' was chopped off the beginning and we are evaluating what might come after 'gg'."},
+        {text10: "This still can't be evaluated. There are no 3-letter combinations that starts with 'gg'. Let's chop off one more."},
         {text11: "Now we are looking for 2-letter combinations that starts with 'g'."},
         {text12: "Let's look at the list of words one more time..."},
         {text13: "Now we have possibilities for our next letter!"},
@@ -182,17 +182,16 @@ function BookPages({ height, width, borderRadius, scrollProgress }) {
         {text16: "This is what the final word looks like!"},
     ]
 
-    const findPageNumber = (scrollProgress, totalNumOfPages) => {
-        const actualPageNum = ((pages.length - 1) / 100) * scrollProgress;
-        const pageInt = parseInt(actualPageNum);
-        const pageDec = actualPageNum - pageInt;
-        const adjustedPageNum = ( pageDec >= 0.5 ? Math.round(actualPageNum) : pageInt + (pageDec * 2) )
-        setPage({selected: adjustedPageNum})        
-    }
-
     useEffect(() => {
+        const findPageNumber = (scrollProgress, totalNumOfPages) => {
+            const actualPageNum = ((pages.length - 1) / 100) * scrollProgress;
+            const pageInt = parseInt(actualPageNum);
+            const pageDec = actualPageNum - pageInt;
+            const adjustedPageNum = ( pageDec >= 0.5 ? Math.round(actualPageNum) : pageInt + (pageDec * 2) )
+            setPage({selected: adjustedPageNum})        
+        }
         findPageNumber(scrollProgress, pages.length)
-    }, [scrollProgress])
+    }, [scrollProgress, pages.length])
     
     const handleSelectedChange = selected => {
         console.log(selected)

@@ -24,10 +24,11 @@ function HowItWorks() {
     }, [])
     
     return (
-        <Container>
-            <Book scrollProgress={scrollProgress} />
-        </Container>
-        
+        <>
+            <Container>
+                <Book scrollProgress={scrollProgress} />
+            </Container>
+        </>
     )
 }
 
