@@ -41,13 +41,18 @@ const Cover = styled.div`
     }
 `
 const Text = styled(Typography)`
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     text-align: left;
     padding: 0 20px;
-    @media (max-height: 800px) {
+    @media (max-height: 825px) {
         font-size: 20px;
     }
-    @media (max-height: 650px) {
-        font-size: 16px;
+    @media (max-height: 725px) {
+        font-size: 18px;
+    }
+    @media (max-height: 675px) {
+        font-size: 15px;
     }
 `
 
@@ -194,7 +199,6 @@ function BookPages({ height, width, borderRadius, scrollProgress }) {
     }, [scrollProgress, pages.length])
     
     const handleSelectedChange = selected => {
-        console.log(selected)
         setPage({selected: Math.round(selected)})
     }
  

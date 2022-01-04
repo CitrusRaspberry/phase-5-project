@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
 import ShortTextIcon from "@mui/icons-material/ShortText";
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, Container } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import ListSubheader from "@mui/material/ListSubheader";
@@ -46,7 +46,6 @@ function Word({ customizable }) {
         const signal = controller.signal;
         const len = selections.length;
         const lengthPath = len === "auto" ? "" : `/${len}`;
-        console.log(lengthPath);
         fetch(
             `https://word-generator-app.herokuapp.com/random_word/${selections.name}${lengthPath}`,
             {
@@ -126,16 +125,16 @@ function Word({ customizable }) {
         return returnedArr;
     };
 
-    console.log("length", selections.length, typeof selections.length);
     return (
         <Paper sx={{ minWidth: 275 }}>
             <Card style={cardStyle} variant="outlined">
                 {customizable && (
                     <CardActions>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} md={6}>
                             <InputLabel>Select Lexicon Name</InputLabel>
                             <Select
                                 fullWidth
+                                style={buttonStyle}
                                 value={selections.name}
                                 onChange={(e) =>
                                     setSelections({
@@ -147,10 +146,11 @@ function Word({ customizable }) {
                                 {getNameOptions(allNames)}
                             </Select>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} md={6}>
                             <InputLabel>Choose desired length</InputLabel>
                             <Select
                                 fullWidth
+                                style={buttonStyle}
                                 value={selections.length}
                                 onChange={(e) =>
                                     setSelections({
