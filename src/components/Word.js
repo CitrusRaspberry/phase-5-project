@@ -71,7 +71,7 @@ function Word({ customizable }) {
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
-        fetch("https://word-generator-app.herokuapp.com/lexicon/all", {
+        fetch("https://word-generator-app.herokuapp.com/lexicons", {
             method: "GET",
             signal: signal,
         })
