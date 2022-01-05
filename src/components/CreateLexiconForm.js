@@ -12,20 +12,19 @@ import {
 } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import ValidityItem from "./ValiditiyItem";
 
 function CreateLexiconForm({ lexiconsState }) {
     const [ lexicons, setLexicons ] = lexiconsState;
-    const [showAlert, setShowAlert] = useState({
+    const [ showAlert, setShowAlert ] = useState({
         success: false,
         failure: false,
     });
-    const [allLexiconNames, setAllLexiconNames] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState({
+    const [ isLoading, setIsLoading ] = useState(false);
+    const [ errors, setErrors ] = useState({
         lexiconName: {
             blank: true,
             inUse: false,
@@ -36,7 +35,7 @@ function CreateLexiconForm({ lexiconsState }) {
             json: true,
         },
     });
-    const [formData, setFormData] = useState({
+    const [ formData, setFormData ] = useState({
         lexiconName: "",
         fileData: null,
     });
@@ -65,7 +64,6 @@ function CreateLexiconForm({ lexiconsState }) {
             }))
         }
     };
-    // console.log("DATA", formData)
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -125,7 +123,7 @@ function CreateLexiconForm({ lexiconsState }) {
         };
         reader.readAsText(file);
     };
-    const handleSubmit = (e) => {
+    const handleSubmit = e => {
         e.preventDefault();
         if (anyFileErrors || anyNameErrors) {
             alert(
@@ -148,6 +146,7 @@ function CreateLexiconForm({ lexiconsState }) {
             fetch("https://word-generator-app.herokuapp.com/lexicons", config)
             .then((r) => r.json())
             .then((data) => {
+                console.log("SUBMITTED FORM DATA", data)
                 setLexicons(() => ([
                     ...lexicons,
                     data,

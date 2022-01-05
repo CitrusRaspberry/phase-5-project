@@ -1,8 +1,92 @@
-import { Container, Typography, Grid } from "@mui/material";
+import { useState, useEffect } from "react";
 
 import Word from "./Word";
+import FavoritesList from "./FavoritesList";
 
-function CommunityLexicons({ lexicons }) {
+import {
+    Typography,
+    Container,
+    Grid,
+} from "@mui/material";
+
+
+function CommunityLexicons({ lexicons, selectionsState }) {
+    const [selections, setSelections] = selectionsState;
+    const [ faveWords, setFaveWords ] = useState([]);
+        
+    useEffect(() => {
+        if (selections.lexicon.id) {
+            fetch(
+                `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`
+            )
+                .then((r) => r.json())
+                .then((data) => setFaveWords(data.favorite_words))
+                .catch((error) =>
+                    console.error("Failed to get fave words... ==>", error)
+                );
+        }
+    }, [selections.lexicon]);    
+
+    const handleFaveAdd = word => {
+        const wordObj = faveWords.find(w => w.word === word);
+        if (!wordObj) {
+            const body = { id: -1, word: word };
+            const extendedWords = [
+                ...faveWords,
+                body,
+            ]
+            setFaveWords(() => extendedWords)
+            const config = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify(body),
+            };
+            fetch(
+                `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`,
+                config
+            )
+            .then((r) => r.json())
+            .then(data => {
+                console.log("ADDED FAVE", data)
+                setFaveWords(() => extendedWords.map(w => w.id < 0 ? data : w))
+            })
+            .catch(error => {
+                console.error("Adding favorite word failed... ==>", error)
+                setFaveWords(() => faveWords.filter(w => w.word !== body.word))
+            })
+        } else {
+            handleFaveDelete(wordObj)
+        }
+    };
+
+    const handleFaveDelete = wordObj => {
+        const filteredWords = faveWords.filter((w) => w.id !== wordObj.id)
+        setFaveWords(() => filteredWords)
+        const config = {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        };
+        fetch(
+            `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}/${wordObj.id}`,
+            config
+        )
+        .then((r) => r.json())
+        .then(data => console.log("DELETED FAVE", data))
+        .catch(error => {
+            console.error("Deleting favorite word failed... ==>", error)
+            setFaveWords(() => [
+                ...filteredWords,
+                wordObj,
+            ])
+        })
+    };
+
     return (
         <Container>
             <Grid container spacing={12}>
@@ -10,7 +94,24 @@ function CommunityLexicons({ lexicons }) {
                     <Typography variant="h1">Community Lexicons</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <Word customizable={true} lexicons={lexicons} />
+                    <Word
+                        customizable={true}
+                        lexicons={lexicons}
+                        selectionsState={[selections, setSelections]}
+                        handleFaveAdd={handleFaveAdd}
+                        faveWords={faveWords}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                <Typography variant="h4">
+                {faveWords.length
+                    ? `Community Favorites from '${selections.lexicon.name}'`
+                    : ""}
+                </Typography>
+                <FavoritesList
+                    handleFaveDelete={handleFaveDelete}
+                    faveWords={faveWords}
+                />
                 </Grid>
             </Grid>
         </Container>

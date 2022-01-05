@@ -1,6 +1,5 @@
 import { ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 
-import { red } from "@mui/material/colors";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from "@mui/icons-material/Cancel";
 
@@ -9,7 +8,7 @@ function ValidityItem({ text, isValid }) {
         if (isValid) {
             return <CheckCircleIcon color="success" />;
         } else {
-            return <CancelIcon sx={{ color: red[700] }} />;
+            return <CancelIcon color="error" />;
         }
     };
     return (

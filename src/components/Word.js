@@ -4,11 +4,13 @@ import CardContent from "@mui/material/CardContent";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
 import ShortTextIcon from "@mui/icons-material/ShortText";
-import { Grid, Paper, Container } from "@mui/material";
+import { Grid, Paper, Box, ToggleButton } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import ListSubheader from "@mui/material/ListSubheader";
 import Select from "@mui/material/Select";
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 import { useState, useEffect } from "react";
 
@@ -16,17 +18,17 @@ const cardStyle = { backgroundColor: "lightblue" };
 const cardActionStyle = { justifyContent: "center" };
 const inputStyle = { backgroundColor: "white" };
 
-function Word({ customizable, lexicons }) {
-    const [word, setWord] = useState({
+function Word({ lexicons, customizable, selectionsState, handleFaveAdd, faveWords=[] }) {
+    const [ word, setWord ] = useState({
         value: "loading...",
         loading: true,
     });
-    const [selections, setSelections] = useState({
-        name: "example",
-        length: "auto",
-    });
-    const [reload, setReload] = useState(0);
+    const [ selections, setSelections ] = selectionsState || [{
+        lexicon: {name: "example"}, length: "auto"
+    }, null];
+    const [ reload, setReload ] = useState(0);
     const reloadWord = () => setReload(() => reload + 1);
+    const isFavorited = !!faveWords.find(w => w.word === word.value);
     useEffect(() => {
         if (!word.loading) {
             setWord({
@@ -38,9 +40,8 @@ function Word({ customizable, lexicons }) {
         const signal = controller.signal;
         const len = selections.length;
         const lengthPath = len === "auto" ? "" : `/${len}`;
-        console.log(selections);
         fetch(
-            `https://word-generator-app.herokuapp.com/random_word/${selections.name}${lengthPath}`,
+            `https://word-generator-app.herokuapp.com/random_word/${selections.lexicon.name}${lengthPath}`,
             {
                 method: "GET",
                 signal: signal,
@@ -59,7 +60,7 @@ function Word({ customizable, lexicons }) {
         return function cleanup() {
             controller.abort();
         };
-    }, [reload, selections]);
+    }, [reload, selections.lexicon.name, selections.length]);
 
     const getNameOptions = (lexiconNames) => {
         let prevLetter = "";
@@ -111,11 +112,11 @@ function Word({ customizable, lexicons }) {
                             <Select
                                 fullWidth
                                 style={inputStyle}
-                                value={selections.name}
+                                value={selections.lexicon.name}
                                 onChange={(e) =>
                                     setSelections({
                                         ...selections,
-                                        name: e.target.value,
+                                        lexicon: lexicons.find(l => l.name === e.target.value),
                                     })
                                 }
                             >
@@ -145,6 +146,17 @@ function Word({ customizable, lexicons }) {
                         <Typography variant="h5" component="div">
                             {word.value}
                         </Typography>
+                        {customizable &&
+                        <ToggleButton
+                            value="check"
+                            selected={isFavorited}
+                            onChange={() => handleFaveAdd(word.value)}
+                            color="secondary"
+                            style={inputStyle}
+                        >
+                            {isFavorited ? <StarIcon color="secondary" /> : <StarBorderIcon />}
+                            Favorite
+                        </ToggleButton>}
                     </CardContent>
                     <CardActions style={cardActionStyle}>
                         <LoadingButton

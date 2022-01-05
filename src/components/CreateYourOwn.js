@@ -28,7 +28,7 @@ function CreateYourOwn({ lexiconsState }) {
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <CreateLexiconForm lexiconsState={lexiconsState} />
+                    <CreateLexiconForm lexiconsState={lexiconsState}/>
                 </Grid>
             </Grid>
         </Container>
