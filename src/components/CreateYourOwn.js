@@ -4,7 +4,7 @@ import { Grid, Container } from "@mui/material";
 
 import CreateLexiconForm from "./CreateLexiconForm";
 
-function CreateYourOwn() {
+function CreateYourOwn({ lexiconsState }) {
     return (
         <Container>
             <Grid container spacing={16}>
@@ -28,7 +28,7 @@ function CreateYourOwn() {
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <CreateLexiconForm />
+                    <CreateLexiconForm lexiconsState={lexiconsState} />
                 </Grid>
             </Grid>
         </Container>

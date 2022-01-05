@@ -17,7 +17,8 @@ import { Link } from "react-router-dom";
 
 import ValidityItem from "./ValiditiyItem";
 
-function CreateLexiconForm() {
+function CreateLexiconForm({ lexiconsState }) {
+    const [ lexicons, setLexicons ] = lexiconsState;
     const [showAlert, setShowAlert] = useState({
         success: false,
         failure: false,
@@ -48,7 +49,7 @@ function CreateLexiconForm() {
             [e.target.name]: value,
         });
         const valueIsValid = value.search(/[^a-zA-Z0-9-_]/) === -1;
-        const valueIsUnique = allLexiconNames.indexOf(value) < 0;
+        const valueIsUnique = lexicons.map(l => l.name).indexOf(value) < 0;
         setErrors({
             ...errors,
             lexiconName: {
@@ -145,41 +146,37 @@ function CreateLexiconForm() {
                 body: JSON.stringify(body),
             };
             fetch("https://word-generator-app.herokuapp.com/lexicons", config)
-                .then((r) => r.json())
-                .then((data) => {
-                    setFormData(() => ({
-                        ...formData,
-                        lexiconName: "",
-                    }));
-                    setErrors(() => ({
-                        ...errors,
-                        lexiconName: {
-                            ...errors.lexiconName,
-                            blank: true,
-                        },
-                    }));
-                    setIsLoading(() => false);
-                    setShowAlert(() => ({
-                        success: true,
-                        failure: false,
-                    }));
-                })
-                .catch((error) =>
-                    console.log(
-                        "POST error when creating new lexicon... ==>",
-                        error
-                    )
-                );
+            .then((r) => r.json())
+            .then((data) => {
+                setLexicons(() => ([
+                    ...lexicons,
+                    data,
+                ]))
+                setFormData(() => ({
+                    ...formData,
+                    lexiconName: "",
+                }));
+                setErrors(() => ({
+                    ...errors,
+                    lexiconName: {
+                        ...errors.lexiconName,
+                        blank: true,
+                    },
+                }));
+                setIsLoading(() => false);
+                setShowAlert(() => ({
+                    success: true,
+                    failure: false,
+                }));
+            })
+            .catch((error) =>
+                console.log(
+                    "POST error when creating new lexicon... ==>",
+                    error
+                )
+            );
         }
     };
-    useEffect(() => {
-        fetch("https://word-generator-app.herokuapp.com/lexicons")
-            .then((r) => r.json())
-            .then((data) => setAllLexiconNames(data.map((l) => l.name)))
-            .catch((error) =>
-                console.log("Could not grab all lexicons from server...", error)
-            );
-    }, []);
     return (
         <form onSubmit={handleSubmit}>
             <Paper elevation={12}>

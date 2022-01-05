@@ -12,17 +12,11 @@ import Select from "@mui/material/Select";
 
 import { useState, useEffect } from "react";
 
-const cardStyle = {
-    backgroundColor: "lightblue",
-};
-const cardActionStyle = {
-    justifyContent: "center",
-};
-const buttonStyle = {
-    backgroundColor: "white",
-};
+const cardStyle = { backgroundColor: "lightblue" };
+const cardActionStyle = { justifyContent: "center" };
+const inputStyle = { backgroundColor: "white" };
 
-function Word({ customizable }) {
+function Word({ customizable, lexicons }) {
     const [word, setWord] = useState({
         value: "loading...",
         loading: true,
@@ -32,8 +26,6 @@ function Word({ customizable }) {
         length: "auto",
     });
     const [reload, setReload] = useState(0);
-    const [allNames, setAllNames] = useState(["example"]);
-
     const reloadWord = () => setReload(() => reload + 1);
     useEffect(() => {
         if (!word.loading) {
@@ -46,6 +38,7 @@ function Word({ customizable }) {
         const signal = controller.signal;
         const len = selections.length;
         const lengthPath = len === "auto" ? "" : `/${len}`;
+        console.log(selections);
         fetch(
             `https://word-generator-app.herokuapp.com/random_word/${selections.name}${lengthPath}`,
             {
@@ -68,27 +61,10 @@ function Word({ customizable }) {
         };
     }, [reload, selections]);
 
-    useEffect(() => {
-        const controller = new AbortController();
-        const signal = controller.signal;
-        fetch("https://word-generator-app.herokuapp.com/lexicons", {
-            method: "GET",
-            signal: signal,
-        })
-            .then((r) => r.json())
-            .then((data) => setAllNames(data.map((row) => row.name).sort()))
-            .catch((error) =>
-                console.log("Fetching all Lexicon names failed... ==>", error)
-            );
-        return function cleanup() {
-            controller.abort();
-        };
-    }, []);
-
-    const getNameOptions = (allNames) => {
+    const getNameOptions = (lexiconNames) => {
         let prevLetter = "";
         const returnedArr = [];
-        allNames.forEach((name) => {
+        lexiconNames.forEach((name) => {
             if (name[0] !== prevLetter) {
                 returnedArr.push(
                     <ListSubheader key={name[0]}>{name[0]}</ListSubheader>
@@ -134,7 +110,7 @@ function Word({ customizable }) {
                             <InputLabel>Select Lexicon Name</InputLabel>
                             <Select
                                 fullWidth
-                                style={buttonStyle}
+                                style={inputStyle}
                                 value={selections.name}
                                 onChange={(e) =>
                                     setSelections({
@@ -143,14 +119,14 @@ function Word({ customizable }) {
                                     })
                                 }
                             >
-                                {getNameOptions(allNames)}
+                                {getNameOptions(lexicons.map(l => l.name))}
                             </Select>
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <InputLabel>Choose desired length</InputLabel>
                             <Select
                                 fullWidth
-                                style={buttonStyle}
+                                style={inputStyle}
                                 value={selections.length}
                                 onChange={(e) =>
                                     setSelections({
@@ -172,7 +148,7 @@ function Word({ customizable }) {
                     </CardContent>
                     <CardActions style={cardActionStyle}>
                         <LoadingButton
-                            style={buttonStyle}
+                            style={inputStyle}
                             loading={word.loading}
                             loadingPosition="start"
                             startIcon={<ShortTextIcon />}
