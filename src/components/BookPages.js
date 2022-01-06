@@ -4,6 +4,7 @@ import { Typography } from '@mui/material';
 import FlippingPages from 'flipping-pages'
 /* IMPORTANT */
 import 'flipping-pages/FlippingPages.css'
+import theme from "../theme";
  
 const Cover = styled.div`
     top: 50%;
@@ -26,18 +27,7 @@ const Cover = styled.div`
         height: 100%;
         border-radius: 10px;
         border: #555 solid 3px;
-    }
-    .App-page_red {
-        background: #f44336;
-    }
-    .App-page_green {
-        background: #4caf50;
-    }
-    .App-page_blue {
-        background: #2196f3;
-    }
-    .App-page_orange {
-        background: #ff9800;
+        background: ${theme.palette.tertiary.main};
     }
 `
 const Text = styled(Typography)`
@@ -76,36 +66,20 @@ function BookPages({ height, width, borderRadius, scrollProgress }) {
         }
     }
 
-    const renderPages = (pages, text, Text, findColor, displayPages) => {
+    const renderPages = (pages, text, Text, displayPages) => {
         const pagesAsDivs = [];
         // This loop acts as a .map for both pages and text at the same time.
         for (let i = 0; i < pages.length; i++) {
             const page = Object.values(pages[i])[0]
             const textEntry = Object.values(text[i])[0]
-            const color = findColor(page)
             pagesAsDivs.push(
-                <div key={textEntry} className={`App-page App-page_${color}`}>
+                <div key={textEntry} className={`App-page`}>
                     {displayPages(page)}
                     <Text variant={textVariant}>{textEntry}</Text>
                 </div>
             )
         }
-        // console.log(pagesAsDivs)
         return pagesAsDivs
-    }
-
-    // This function finds color based on page content. Color is determined in App.css
-    // This function just finds the color name which is then used in a className
-    const findColor = page => {
-        if (!page) {
-            return "blue";
-        } else if (page[0][0] === "{") {
-            return "orange";
-        } else if (page.length === 1) {
-            return "blue";
-        } else {
-            return "green";
-        }
     }
     
     const exampleWords = [
@@ -212,7 +186,7 @@ function BookPages({ height, width, borderRadius, scrollProgress }) {
                 touch-action="none"
                 style={{width: width, height: height, borderRadius: borderRadius}}
             >
-                {renderPages(pages, text, Text, findColor, displayPages)}
+                {renderPages(pages, text, Text, displayPages)}
             </FlippingPages>
         </Cover>
     )

@@ -4,31 +4,39 @@ import CardContent from "@mui/material/CardContent";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
 import ShortTextIcon from "@mui/icons-material/ShortText";
-import { Grid, Paper, Box, ToggleButton } from "@mui/material";
+import { Grid, Paper, Container, ToggleButton, Box } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import ListSubheader from "@mui/material/ListSubheader";
 import Select from "@mui/material/Select";
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 import { useState, useEffect } from "react";
 
-const cardStyle = { backgroundColor: "lightblue" };
-const cardActionStyle = { justifyContent: "center" };
 const inputStyle = { backgroundColor: "white" };
 
-function Word({ lexicons, customizable, selectionsState, handleFaveAdd, faveWords=[] }) {
-    const [ word, setWord ] = useState({
+function Word({
+    lexicons,
+    customizable,
+    selectionsState,
+    handleFaveAdd,
+    faveWords = [],
+}) {
+    const [word, setWord] = useState({
         value: "loading...",
         loading: true,
     });
-    const [ selections, setSelections ] = selectionsState || [{
-        lexicon: {name: "example"}, length: "auto"
-    }, null];
-    const [ reload, setReload ] = useState(0);
+    const [selections, setSelections] = selectionsState || [
+        {
+            lexicon: { name: "example" },
+            length: "auto",
+        },
+        null,
+    ];
+    const [reload, setReload] = useState(0);
     const reloadWord = () => setReload(() => reload + 1);
-    const isFavorited = !!faveWords.find(w => w.word === word.value);
+    const isFavorited = !!faveWords.find((w) => w.word === word.value);
     useEffect(() => {
         if (!word.loading) {
             setWord({
@@ -103,62 +111,76 @@ function Word({ lexicons, customizable, selectionsState, handleFaveAdd, faveWord
     };
 
     return (
-        <Paper sx={{ minWidth: 275 }}>
-            <Card style={cardStyle} variant="outlined">
-                {customizable && (
-                    <CardActions>
-                        <Grid item xs={12} md={6}>
-                            <InputLabel>Select Lexicon Name</InputLabel>
-                            <Select
-                                fullWidth
-                                style={inputStyle}
-                                value={selections.lexicon.name}
-                                onChange={(e) =>
-                                    setSelections({
-                                        ...selections,
-                                        lexicon: lexicons.find(l => l.name === e.target.value),
-                                    })
-                                }
-                            >
-                                {getNameOptions(lexicons.map(l => l.name))}
-                            </Select>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <InputLabel>Choose desired length</InputLabel>
-                            <Select
-                                fullWidth
-                                style={inputStyle}
-                                value={selections.length}
-                                onChange={(e) =>
-                                    setSelections({
-                                        ...selections,
-                                        length: e.target.value,
-                                    })
-                                }
-                            >
-                                {getLengthOptions(3, 20)}
-                            </Select>
-                        </Grid>
-                    </CardActions>
-                )}
-                <Grid item xs={12}>
-                    <CardContent>
-                        <Typography variant="h5" component="div">
+        <Paper
+            elevation={3}
+            sx={{ minWidth: 275, backgroundColor: "secondary.main" }}
+        >
+            <Container>
+                <Grid container spacing={2}>
+                    {customizable && (
+                        <>
+                            <Grid item xs={12} sm={6}>
+                                <InputLabel>Select Lexicon Name</InputLabel>
+                                <Select
+                                    fullWidth
+                                    style={inputStyle}
+                                    value={selections.lexicon.name}
+                                    onChange={(e) =>
+                                        setSelections({
+                                            ...selections,
+                                            lexicon: lexicons.find(
+                                                (l) => l.name === e.target.value
+                                            ),
+                                        })
+                                    }
+                                >
+                                    {getNameOptions(
+                                        lexicons.map((l) => l.name)
+                                    )}
+                                </Select>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <InputLabel>Choose desired length</InputLabel>
+                                <Select
+                                    fullWidth
+                                    style={inputStyle}
+                                    value={selections.length}
+                                    onChange={(e) =>
+                                        setSelections({
+                                            ...selections,
+                                            length: e.target.value,
+                                        })
+                                    }
+                                >
+                                    {getLengthOptions(3, 20)}
+                                </Select>
+                            </Grid>
+                        </>
+                    )}
+                    <Grid item xs={12}>
+                        <Typography variant="h4" component="div">
                             {word.value}
                         </Typography>
-                        {customizable &&
-                        <ToggleButton
-                            value="check"
-                            selected={isFavorited}
-                            onChange={() => handleFaveAdd(word.value)}
-                            color="secondary"
-                            style={inputStyle}
-                        >
-                            {isFavorited ? <StarIcon color="secondary" /> : <StarBorderIcon />}
-                            Favorite
-                        </ToggleButton>}
-                    </CardContent>
-                    <CardActions style={cardActionStyle}>
+                    </Grid>
+                    {customizable && (
+                        <Grid item xs={12}>
+                            <ToggleButton
+                                value="check"
+                                selected={isFavorited}
+                                onChange={() => handleFaveAdd(word.value)}
+                                color="primary"
+                                style={inputStyle}
+                            >
+                                {isFavorited ? (
+                                    <StarIcon color="primary" />
+                                ) : (
+                                    <StarBorderIcon />
+                                )}
+                                Favorite
+                            </ToggleButton>
+                        </Grid>
+                    )}
+                    <Grid item xs={12}>
                         <LoadingButton
                             style={inputStyle}
                             loading={word.loading}
@@ -176,9 +198,10 @@ function Word({ lexicons, customizable, selectionsState, handleFaveAdd, faveWord
                         >
                             Get New Word
                         </LoadingButton>
-                    </CardActions>
+                    </Grid>
+                    <Grid item xs={12}></Grid>
                 </Grid>
-            </Card>
+            </Container>
         </Paper>
     );
 }

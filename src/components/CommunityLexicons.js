@@ -3,17 +3,12 @@ import { useState, useEffect } from "react";
 import Word from "./Word";
 import FavoritesList from "./FavoritesList";
 
-import {
-    Typography,
-    Container,
-    Grid,
-} from "@mui/material";
-
+import { Typography, Container, Grid } from "@mui/material";
 
 function CommunityLexicons({ lexicons, selectionsState }) {
     const [selections, setSelections] = selectionsState;
-    const [ faveWords, setFaveWords ] = useState([]);
-        
+    const [faveWords, setFaveWords] = useState([]);
+
     useEffect(() => {
         if (selections.lexicon.id) {
             fetch(
@@ -25,17 +20,14 @@ function CommunityLexicons({ lexicons, selectionsState }) {
                     console.error("Failed to get fave words... ==>", error)
                 );
         }
-    }, [selections.lexicon]);    
+    }, [selections.lexicon]);
 
-    const handleFaveAdd = word => {
-        const wordObj = faveWords.find(w => w.word === word);
+    const handleFaveAdd = (word) => {
+        const wordObj = faveWords.find((w) => w.word === word);
         if (!wordObj) {
             const body = { id: -1, word: word };
-            const extendedWords = [
-                ...faveWords,
-                body,
-            ]
-            setFaveWords(() => extendedWords)
+            const extendedWords = [...faveWords, body];
+            setFaveWords(() => extendedWords);
             const config = {
                 method: "POST",
                 headers: {
@@ -48,23 +40,27 @@ function CommunityLexicons({ lexicons, selectionsState }) {
                 `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`,
                 config
             )
-            .then((r) => r.json())
-            .then(data => {
-                console.log("ADDED FAVE", data)
-                setFaveWords(() => extendedWords.map(w => w.id < 0 ? data : w))
-            })
-            .catch(error => {
-                console.error("Adding favorite word failed... ==>", error)
-                setFaveWords(() => faveWords.filter(w => w.word !== body.word))
-            })
+                .then((r) => r.json())
+                .then((data) => {
+                    console.log("ADDED FAVE", data);
+                    setFaveWords(() =>
+                        extendedWords.map((w) => (w.id < 0 ? data : w))
+                    );
+                })
+                .catch((error) => {
+                    console.error("Adding favorite word failed... ==>", error);
+                    setFaveWords(() =>
+                        faveWords.filter((w) => w.word !== body.word)
+                    );
+                });
         } else {
-            handleFaveDelete(wordObj)
+            handleFaveDelete(wordObj);
         }
     };
 
-    const handleFaveDelete = wordObj => {
-        const filteredWords = faveWords.filter((w) => w.id !== wordObj.id)
-        setFaveWords(() => filteredWords)
+    const handleFaveDelete = (wordObj) => {
+        const filteredWords = faveWords.filter((w) => w.id !== wordObj.id);
+        setFaveWords(() => filteredWords);
         const config = {
             method: "DELETE",
             headers: {
@@ -76,15 +72,12 @@ function CommunityLexicons({ lexicons, selectionsState }) {
             `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}/${wordObj.id}`,
             config
         )
-        .then((r) => r.json())
-        .then(data => console.log("DELETED FAVE", data))
-        .catch(error => {
-            console.error("Deleting favorite word failed... ==>", error)
-            setFaveWords(() => [
-                ...filteredWords,
-                wordObj,
-            ])
-        })
+            .then((r) => r.json())
+            .then((data) => console.log("DELETED FAVE", data))
+            .catch((error) => {
+                console.error("Deleting favorite word failed... ==>", error);
+                setFaveWords(() => [...filteredWords, wordObj]);
+            });
     };
 
     return (
@@ -102,17 +95,20 @@ function CommunityLexicons({ lexicons, selectionsState }) {
                         faveWords={faveWords}
                     />
                 </Grid>
-                <Grid item xs={12}>
-                <Typography variant="h4">
-                {faveWords.length
-                    ? `Community Favorites from '${selections.lexicon.name}'`
-                    : ""}
-                </Typography>
-                <FavoritesList
-                    handleFaveDelete={handleFaveDelete}
-                    faveWords={faveWords}
-                />
-                </Grid>
+
+                {!!faveWords.length && (
+                    <Grid item xs={12}>
+                        <Typography variant="h2">
+                            Community Favorites from '{selections.lexicon.name}'
+                        </Typography>
+                        <FavoritesList
+                            handleFaveDelete={handleFaveDelete}
+                            faveWords={faveWords}
+                        />
+                    </Grid>
+                )}
+
+                <Grid item xs={12}></Grid>
             </Grid>
         </Container>
     );

@@ -1,6 +1,6 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider, responsiveFontSizes } from '@mui/material/styles';
 
 import NavBar from "./components/NavBar";
 import Home from "./components/Home";
@@ -8,6 +8,8 @@ import HowItWorks from './components/HowItWorks';
 import CreateYourOwn from './components/CreateYourOwn';
 import CommunityLexicons from "./components/CommunityLexicons";
 import { useEffect, useState } from 'react';
+
+import theme from "./theme";
 
 
 function App() {
@@ -35,7 +37,7 @@ function App() {
     
     return (
         <div className="App">
-
+            <ThemeProvider theme={theme}>
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<Home />}/>
@@ -49,7 +51,7 @@ function App() {
                     />}/>
                     <Route path="/for-developers" element={<p>dev</p>}/>
                 </Routes>
-
+            </ThemeProvider>
         </div>
     );
 }

@@ -25,6 +25,8 @@ function Home() {
                     <Typography variant="h2">See it in action!</Typography>
                     <Word />
                 </Grid>
+                <Grid item xs={12}>
+                </Grid>
             </Grid>
         </Container>
     );
