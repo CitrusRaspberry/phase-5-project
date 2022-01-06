@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
@@ -28,6 +27,17 @@ const getPathFrom = page => {
     }
 }
 
+const CenterLogo = styled(Box)`
+height: 50px;
+position: absolute;
+left: 50%;
+transform: translateX(-50%);
+`
+const LeftLogo = styled(Box)`
+height: 50px;
+margin-right: 10px;
+`
+
 const PlainLink = styled(Link)`
     color: inherit;
     text-decoration: none;
@@ -49,14 +59,13 @@ function NavBar() {
         <AppBar ref={appBarRef}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-                    >
-                        LOGO
-                    </Typography>
+                    <Link to="/">
+                    <LeftLogo
+                        src="./fwm_logo_white.png"
+                        component="img"
+                        sx={{ display: { xs: "none", md: "flex" } }}
+                    />
+                    </Link>
                     <Box
                         sx={{
                             flexGrow: 1,
@@ -74,17 +83,11 @@ function NavBar() {
                             <MenuIcon />
                         </IconButton>
                     </Box>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{
-                            flexGrow: 1,
-                            display: { xs: "flex", md: "none" }
-                        }}
-                    >
-                        LOGO
-                    </Typography>
+                    <CenterLogo
+                        src="./fwm_logo_white.png"
+                        component="img"
+                        sx={{display: { xs: "flex", md: "none" }}}
+                    />
                     <Drawer
                         anchor={"left"}
                         open={drawerIsOpen}

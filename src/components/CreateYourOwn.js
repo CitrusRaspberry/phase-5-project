@@ -30,6 +30,8 @@ function CreateYourOwn({ lexiconsState }) {
                 <Grid item xs={12}>
                     <CreateLexiconForm lexiconsState={lexiconsState}/>
                 </Grid>
+                <Grid item xs={12}>
+                </Grid>
             </Grid>
         </Container>
     );

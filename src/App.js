@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import HowItWorks from './components/HowItWorks';
 import CreateYourOwn from './components/CreateYourOwn';
 import CommunityLexicons from "./components/CommunityLexicons";
+import ForDevelopers from './components/ForDevelopers';
 import { useEffect, useState } from 'react';
 
 import theme from "./theme";
@@ -49,7 +50,7 @@ function App() {
                         lexicons={lexicons}
                         selectionsState={[selections, setSelections]}
                     />}/>
-                    <Route path="/for-developers" element={<p>dev</p>}/>
+                    <Route path="/for-developers" element={<ForDevelopers />}/>
                 </Routes>
             </ThemeProvider>
         </div>
