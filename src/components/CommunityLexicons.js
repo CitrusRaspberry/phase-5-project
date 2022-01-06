@@ -11,14 +11,23 @@ function CommunityLexicons({ lexicons, selectionsState }) {
 
     useEffect(() => {
         if (selections.lexicon.id) {
+            const controller = new AbortController();
+            const signal = controller.signal;
             fetch(
-                `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`
+                `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`,
+                {
+                    method: "GET",
+                    signal: signal,
+                }
             )
                 .then((r) => r.json())
                 .then((data) => setFaveWords(data.favorite_words))
                 .catch((error) =>
-                    console.error("Failed to get fave words... ==>", error)
+                    console.log("Failed to get fave words... ==>", error)
                 );
+            return function cleanup() {
+                controller.abort();
+            };
         }
     }, [selections.lexicon]);
 
@@ -95,7 +104,6 @@ function CommunityLexicons({ lexicons, selectionsState }) {
                         faveWords={faveWords}
                     />
                 </Grid>
-
                 {!!faveWords.length && (
                     <Grid item xs={12}>
                         <Typography variant="h2">
@@ -107,7 +115,6 @@ function CommunityLexicons({ lexicons, selectionsState }) {
                         />
                     </Grid>
                 )}
-
                 <Grid item xs={12}></Grid>
             </Grid>
         </Container>

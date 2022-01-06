@@ -1,10 +1,7 @@
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
 import ShortTextIcon from "@mui/icons-material/ShortText";
-import { Grid, Paper, Container, ToggleButton, Box } from "@mui/material";
+import { Grid, Paper, Container, ToggleButton } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import ListSubheader from "@mui/material/ListSubheader";
@@ -37,6 +34,7 @@ function Word({
     const [reload, setReload] = useState(0);
     const reloadWord = () => setReload(() => reload + 1);
     const isFavorited = !!faveWords.find((w) => w.word === word.value);
+
     useEffect(() => {
         if (!word.loading) {
             setWord({
@@ -125,14 +123,14 @@ function Word({
                                     fullWidth
                                     style={inputStyle}
                                     value={selections.lexicon.name}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                         setSelections({
                                             ...selections,
                                             lexicon: lexicons.find(
                                                 (l) => l.name === e.target.value
                                             ),
-                                        })
-                                    }
+                                        });
+                                    }}
                                 >
                                     {getNameOptions(
                                         lexicons.map((l) => l.name)
