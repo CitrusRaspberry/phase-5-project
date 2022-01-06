@@ -18,7 +18,7 @@ const Cover = styled.div`
         -webkit-user-select: none;
         user-select: none;
         margin: auto;
-        max-height: 90vh;
+        max-height: 75vh;
         max-width: 90vw;
         border: lightgray 10px double;
     }
@@ -35,14 +35,20 @@ const Text = styled(Typography)`
     font-family: 'Roboto Mono', monospace;
     text-align: left;
     padding: 0 20px;
-    @media (max-height: 825px) {
+    @media (max-height: 1025px) {
         font-size: 20px;
     }
-    @media (max-height: 725px) {
+    @media (max-height: 925px) {
         font-size: 18px;
     }
-    @media (max-height: 675px) {
-        font-size: 15px;
+    @media (max-height: 825px) {
+        font-size: 16px;
+    }
+    @media (max-height: 725px) {
+        font-size: 14px;
+    }
+    @media (max-height: 625px) {
+        font-size: 12px;
     }
 `
 

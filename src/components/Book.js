@@ -5,7 +5,7 @@ const BookCover = styled.div`
     position: fixed;
     left: 50%;
     top: 50%;
-    max-height: 90vh;
+    max-height: 75vh;
     max-width: 90vw;
     transform: translate(-50%, -50%);
     background-color: gray;
