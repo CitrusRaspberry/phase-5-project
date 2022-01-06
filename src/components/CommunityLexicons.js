@@ -14,7 +14,7 @@ function CommunityLexicons({ lexicons, selectionsState }) {
             const controller = new AbortController();
             const signal = controller.signal;
             fetch(
-                `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`,
+                `https://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`,
                 {
                     method: "GET",
                     signal: signal,
@@ -46,7 +46,7 @@ function CommunityLexicons({ lexicons, selectionsState }) {
                 body: JSON.stringify(body),
             };
             fetch(
-                `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`,
+                `https://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}`,
                 config
             )
                 .then((r) => r.json())
@@ -78,7 +78,7 @@ function CommunityLexicons({ lexicons, selectionsState }) {
             },
         };
         fetch(
-            `http://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}/${wordObj.id}`,
+            `https://word-generator-app.herokuapp.com/lexicons/${selections.lexicon.id}/${wordObj.id}`,
             config
         )
             .then((r) => r.json())
